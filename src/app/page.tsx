@@ -25,12 +25,12 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/register">
               <Button size="lg" className="shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                Get Started for Free
+                Sign Up
               </Button>
             </Link>
             <Link href="/login">
               <Button size="lg" variant="secondary" className="bg-white border hover:bg-gray-50 transition-all duration-300">
-                View Live Demo
+                Login
               </Button>
             </Link>
           </div>
