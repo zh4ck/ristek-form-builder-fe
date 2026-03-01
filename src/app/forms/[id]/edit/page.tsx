@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { QuestionCard } from './components/QuestionCard';
 import { useAutosave } from '@/hooks/useAutosave';
-import { Check, Loader2, Plus, ArrowLeft } from 'lucide-react';
+import { Check, Loader2, Plus, ArrowLeft, ExternalLink, Globe } from 'lucide-react';
 import Link from 'next/link';
 import {
     DndContext,
@@ -49,6 +49,10 @@ export default function EditFormPage({ params }: { params: Promise<{ id: string 
     const { register, control, watch, reset } = useForm<FormState>({
         defaultValues: { title: '', description: '', isPublished: false, questions: [] },
     });
+
+    // Separate local state for publish status so we can control it independently of autosave
+    const [isPublished, setIsPublished] = useState(false);
+    const [isPublishing, setIsPublishing] = useState(false);
 
     // Automatically track arrays and push up unique random IDs specifically for Dnd-Kit bound mapping logic
     const { fields, append, remove, move } = useFieldArray({
@@ -94,6 +98,7 @@ export default function EditFormPage({ params }: { params: Promise<{ id: string 
                         options: q.options || [],
                     })),
                 });
+                setIsPublished(data.isPublished);
             } catch (error) {
                 console.error('Fetch error:', error);
             } finally {
@@ -103,6 +108,45 @@ export default function EditFormPage({ params }: { params: Promise<{ id: string 
 
         fetchFormStructure();
     }, [token, formId, reset, router]);
+
+    // Publish: save current state as published, then open the live form
+    const handlePublish = async () => {
+        if (!token) return;
+        setIsPublishing(true);
+        try {
+            const res = await fetch(`http://localhost:5000/api/forms/${formId}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ isPublished: true }),
+            });
+            if (res.ok) {
+                setIsPublished(true);
+                window.open(`/f/${formId}`, '_blank');
+            }
+        } catch (e) {
+            console.error('Publish error:', e);
+        } finally {
+            setIsPublishing(false);
+        }
+    };
+
+    // Unpublish: set form back to draft
+    const handleUnpublish = async () => {
+        if (!token) return;
+        setIsPublishing(true);
+        try {
+            const res = await fetch(`http://localhost:5000/api/forms/${formId}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ isPublished: false }),
+            });
+            if (res.ok) setIsPublished(false);
+        } catch (e) {
+            console.error('Unpublish error:', e);
+        } finally {
+            setIsPublishing(false);
+        }
+    };
 
     // Configure Dnd-kit hardware bindings
     const sensors = useSensors(
@@ -158,18 +202,45 @@ export default function EditFormPage({ params }: { params: Promise<{ id: string 
                             <span>All changes saved</span>
                         )}
                     </div>
+                    {/* Publish Controls */}
                     <div className="h-6 w-px bg-gray-200"></div>
-                    <label className="flex items-center gap-2 cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full border border-indigo-200 transition-colors">
-                        <span className="text-sm font-semibold text-indigo-700">Publish Form</span>
-                        <input
-                            type="checkbox"
-                            className="sr-only"
-                            {...register('isPublished')}
-                        />
-                        <div className={`w-8 h-4 rounded-full transition-colors relative ${formData.isPublished ? 'bg-indigo-600' : 'bg-gray-300'}`}>
-                            <div className={`absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform ${formData.isPublished ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                    {isPublished ? (
+                        <div className="flex items-center gap-2">
+                            <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full">
+                                <Globe className="w-3.5 h-3.5" />
+                                Published
+                            </span>
+                            <a
+                                href={`/f/${formId}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-1.5 rounded-full transition-colors"
+                            >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                                View Live
+                            </a>
+                            <button
+                                onClick={handleUnpublish}
+                                disabled={isPublishing}
+                                className="text-sm font-medium text-gray-500 hover:text-red-600 bg-gray-50 hover:bg-red-50 border border-gray-200 hover:border-red-200 px-3 py-1.5 rounded-full transition-colors disabled:opacity-50"
+                            >
+                                {isPublishing ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Unpublish'}
+                            </button>
                         </div>
-                    </label>
+                    ) : (
+                        <button
+                            onClick={handlePublish}
+                            disabled={isPublishing}
+                            className="flex items-center gap-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded-full shadow-sm hover:shadow-indigo-200 hover:shadow-md transition-all disabled:opacity-60"
+                        >
+                            {isPublishing ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                                <Globe className="w-4 h-4" />
+                            )}
+                            Publish & View
+                        </button>
+                    )}
                 </div>
             </header>
 

@@ -14,7 +14,7 @@ export const Navbar: React.FC = () => {
                     {/* Logo / Brand Name */}
                     <div className="flex-shrink-0 flex items-center">
                         <Link href="/" className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity">
-                            Form Builder
+                            Zh4ck's Form Builder
                         </Link>
                     </div>
 

@@ -6,9 +6,9 @@ export const Footer: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className="mb-4 md:mb-0">
-                        <h2 className="text-lg font-semibold text-gray-900">Ristek Form Builder</h2>
+                        <h2 className="text-lg font-semibold text-gray-900">Form Builder for Ristek Web Dev SIG</h2>
                         <p className="text-sm text-gray-500 mt-1">
-                            Create and manage beautiful forms easily.
+                            Have a great day :3
                         </p>
                     </div>
                     <div className="flex space-x-6 text-sm text-gray-500">
