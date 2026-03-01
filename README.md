@@ -1,37 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Form Builder
 
-## Getting Started
+A modern, full-stack Form Builder application with a drag-and-drop editor, autosave, real-time analytics, and a responsive respondent view.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Drag-and-Drop Editor**: Build complex forms with multiple question types (Short Answer, Multiple Choice, Checkbox, Dropdown).
+- **Autosave**: Changes are automatically saved to the database as you edit.
+- **Analytics Dashboard**: Visualize response data with Pie and Bar charts using Recharts.
+- **Authentication**: Secure JWT-based authentication for managing your forms.
+- **Published/Draft States**: Control when your forms are public.
+- **Nested Question Management**: Support for infinite options within choice-based questions.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Setup Instructions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerequisites
 
-## Learn More
+- **Node.js**: v18 or later.
+- **PostgreSQL**: A running instance (e.g., [Neon](https://neon.tech/)).
 
-To learn more about Next.js, take a look at the following resources:
+### 1. Backend Setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1.  **Navigate to the root directory**:
+    ```bash
+    cd "RISTEK Web Dev Form Builder"
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
 
-## Deploy on Vercel
+3.  **Configure environment variables**:
+    Create a `.env` file in the root directory and add:
+    ```env
+    DATABASE_URL="postgresql://user:password@host/dbname?sslmode=require&schema=public"
+    JWT_SECRET="your_secret_key"
+    PORT=5000
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4.  **Initialize Database**:
+    Push the Prisma schema to your database:
+    ```bash
+    npx prisma db push
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-#
+5.  **Start the server**:
+    ```bash
+    npm run dev
+    ```
+    The backend will be running at `http://localhost:5000`.
+    Swagger docs are available at `http://localhost:5000/api-docs`.
+
+### 2. Frontend Setup
+
+1.  **Navigate to the frontend directory**:
+    ```bash
+    cd frontend
+    ```
+
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+
+3.  **Configure environment variables**:
+    Create a `.env.local` file in the `frontend` directory:
+    ```env
+    NEXT_PUBLIC_API_URL="http://localhost:5000"
+    ```
+
+4.  **Start the development server**:
+    ```bash
+    npm run dev
+    ```
+    The frontend will be running at `http://localhost:3000`.
+
+---
+
+## 🏗️ Technology Stack
+
+- **Backend**: Node.js, Express, Prisma ORM, PostgreSQL, JWT, Swagger.
+- **Frontend**: Next.js (App Router), Tailwind CSS, React Hook Form, Zod, dnd-kit, Recharts, Lucide React.
+
+---
+
+## 📝 Usage
+
+1.  **Register/Login**: Create an account to start building forms.
+2.  **Dashboard**: View all your forms, search by title, and sort by creation date.
+3.  **Editor**: Click "Edit" on a form. Add questions, drag them to reorder, and toggle "Publish" to make them public.
+4.  **Respondent View**: Use the link `/f/[form-id]` to let people fill out your form.
+5.  **Analytics**: Click "Results" on the dashboard to see visualized data of your submissions.
