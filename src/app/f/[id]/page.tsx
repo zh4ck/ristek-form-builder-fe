@@ -3,6 +3,7 @@
 import React, { useEffect, useState, use } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { API_BASE_URL } from '@/lib/constants';
 
 interface Option {
     id: string;
@@ -38,7 +39,7 @@ export default function RespondentFormPage({ params }: { params: Promise<{ id: s
     useEffect(() => {
         const fetchForm = async () => {
             try {
-                const res = await fetch(`http://localhost:5000/api/submissions/${formId}/form`);
+                const res = await fetch(`${API_BASE_URL}/api/submissions/${formId}/form`);
                 if (!res.ok) {
                     const data = await res.json();
                     setFetchError(data.error || 'This form is not available.');
@@ -116,7 +117,7 @@ export default function RespondentFormPage({ params }: { params: Promise<{ id: s
                     : (answers[q.id] || ''),
             }));
 
-            const res = await fetch(`http://localhost:5000/api/submissions/${formId}`, {
+            const res = await fetch(`${API_BASE_URL}/api/submissions/${formId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ answers: payload }),

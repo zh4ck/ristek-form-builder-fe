@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+import { API_BASE_URL } from '@/lib/constants';
 
 // Zod Schema for strong typing and validation
 const loginSchema = z.object({
@@ -32,7 +33,7 @@ export default function LoginPage() {
     const onSubmit = async (data: LoginFormValues) => {
         setGlobalError(null);
         try {
-            const response = await fetch('http://localhost:5000/api/auth/login', {
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),

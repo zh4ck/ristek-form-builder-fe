@@ -9,6 +9,7 @@ import { QuestionCard } from './components/QuestionCard';
 import { useAutosave } from '@/hooks/useAutosave';
 import { Check, Loader2, Plus, ArrowLeft, ExternalLink, Globe } from 'lucide-react';
 import Link from 'next/link';
+import { API_BASE_URL } from '@/lib/constants';
 import {
     DndContext,
     closestCenter,
@@ -77,7 +78,7 @@ export default function EditFormPage({ params }: { params: Promise<{ id: string 
 
         const fetchFormStructure = async () => {
             try {
-                const res = await fetch(`http://localhost:5000/api/forms/${formId}`, {
+                const res = await fetch(`${API_BASE_URL}/api/forms/${formId}`, {
                     headers: { 'Authorization': `Bearer ${token}` },
                 });
 
@@ -114,7 +115,7 @@ export default function EditFormPage({ params }: { params: Promise<{ id: string 
         if (!token) return;
         setIsPublishing(true);
         try {
-            const res = await fetch(`http://localhost:5000/api/forms/${formId}`, {
+            const res = await fetch(`${API_BASE_URL}/api/forms/${formId}`, {
                 method: 'PUT',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ isPublished: true }),
@@ -135,7 +136,7 @@ export default function EditFormPage({ params }: { params: Promise<{ id: string 
         if (!token) return;
         setIsPublishing(true);
         try {
-            const res = await fetch(`http://localhost:5000/api/forms/${formId}`, {
+            const res = await fetch(`${API_BASE_URL}/api/forms/${formId}`, {
                 method: 'PUT',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ isPublished: false }),

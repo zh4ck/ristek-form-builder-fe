@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+import { API_BASE_URL } from '@/lib/constants';
 
 // Zod Schema validating specific rules securely on the client edge
 const registerSchema = z.object({
@@ -34,7 +35,7 @@ export default function RegisterPage() {
         setGlobalError(null);
         try {
             // POST mapping to the custom backend Express logic built earlier
-            const response = await fetch('http://localhost:5000/api/auth/register', {
+            const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { API_BASE_URL } from '@/lib/constants';
 
 export function useAutosave(
     data: any,
@@ -31,7 +32,7 @@ export function useAutosave(
             setIsSaving(true);
 
             try {
-                const response = await fetch(`http://localhost:5000/api/forms/${formId}`, {
+                const response = await fetch(`${API_BASE_URL}/api/forms/${formId}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,

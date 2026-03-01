@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Plus, LayoutGrid, Search, Calendar, FileText, ExternalLink, Trash2, Copy, Lock } from 'lucide-react';
 import Link from 'next/link';
+import { API_BASE_URL } from '@/lib/constants';
 
 interface Form {
     id: string;
@@ -46,7 +47,7 @@ export default function DashboardPage() {
         const fetchForms = async () => {
             setIsFetching(true);
             try {
-                const url = new URL('http://localhost:5000/api/forms');
+                const url = new URL(`${API_BASE_URL}/api/forms`);
                 if (searchQuery) url.searchParams.append('search', searchQuery);
                 url.searchParams.append('sort', sortOrder);
 
@@ -77,7 +78,7 @@ export default function DashboardPage() {
         if (!token) return;
         setIsCreating(true);
         try {
-            const response = await fetch('http://localhost:5000/api/forms', {
+            const response = await fetch(`${API_BASE_URL}/api/forms`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
             });
@@ -94,7 +95,7 @@ export default function DashboardPage() {
         if (!token) return;
         setIsDeletingId(formId);
         try {
-            const response = await fetch(`http://localhost:5000/api/forms/${formId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/forms/${formId}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` },
             });
@@ -113,13 +114,13 @@ export default function DashboardPage() {
         if (!token) return;
         setIsDuplicatingId(formId);
         try {
-            const response = await fetch(`http://localhost:5000/api/forms/${formId}/duplicate`, {
+            const response = await fetch(`${API_BASE_URL}/api/forms/${formId}/duplicate`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
             });
             if (response.ok) {
                 // Refresh the list to show the new copy
-                const url = new URL('http://localhost:5000/api/forms');
+                const url = new URL(`${API_BASE_URL}/api/forms`);
                 url.searchParams.append('sort', sortOrder);
                 const listRes = await fetch(url.toString(), {
                     headers: { 'Authorization': `Bearer ${token}` },

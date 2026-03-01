@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Loader2, ArrowLeft, BarChart3, MessageSquareText } from 'lucide-react';
 import Link from 'next/link';
+import { API_BASE_URL } from '@/lib/constants';
 import {
     PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend,
     BarChart, Bar, XAxis, YAxis, CartesianGrid,
@@ -83,7 +84,7 @@ export default function StatsPage({ params }: { params: Promise<{ id: string }> 
         const fetchData = async () => {
             try {
                 // Fetch form title
-                const formRes = await fetch(`http://localhost:5000/api/forms/${formId}`, {
+                const formRes = await fetch(`${API_BASE_URL}/api/forms/${formId}`, {
                     headers: { 'Authorization': `Bearer ${token}` },
                 });
                 if (formRes.ok) {
@@ -92,7 +93,7 @@ export default function StatsPage({ params }: { params: Promise<{ id: string }> 
                 }
 
                 // Fetch submissions
-                const subsRes = await fetch(`http://localhost:5000/api/forms/${formId}/submissions`, {
+                const subsRes = await fetch(`${API_BASE_URL}/api/forms/${formId}/submissions`, {
                     headers: { 'Authorization': `Bearer ${token}` },
                 });
                 if (subsRes.ok) {
